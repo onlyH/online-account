@@ -37,3 +37,9 @@ let itemsWidthCategory = items.map(item=> {
 //过滤列表
 
 ```
+
+
+>> 测试 jest
+>> react官方测试工具- reactTestUtils
+>> Airbnb基于官网的封装-Enzyme
+>> Enzyme优点：简单，易懂，类似于jquery链式写法
