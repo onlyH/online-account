@@ -10,7 +10,7 @@ const ViewTabs = ({activeTab, onTabChange}) => (
     <ul className="nav nav-tabs nav-fill my-4">
         <li className="nav-item">
             <a
-                href="javascript:;"
+                href="#"
                 className={generate(activeTab, LIST_VIEW)}
                 onClick={e=> {
                     e.preventDefault();
@@ -25,7 +25,7 @@ const ViewTabs = ({activeTab, onTabChange}) => (
             列表模式</a></li>
         <li className="nav-item">
             <a
-                href="javascript:;"
+                href="#"
                 className={generate(activeTab, CHART_VIEW)}
                 onClick={e=>{
                     e.preventDefault()

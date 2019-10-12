@@ -1,6 +1,6 @@
 // 容器组件，关心数据的运作方式，提供数据以及操作数据的方法，回调函数，有状态的，作为数据源的存在
 import React, {Component, Fragment} from 'react';
-import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, parseToYearAndMonth} from "../utility";
+import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, parseToYearAndMonth, n} from "../utility";
 import PriceList from "../components/PriceList";
 import ViewTabs from "../components/ViewTabs";
 import MonthPicker from "../components/MonthPicker";
@@ -25,7 +25,7 @@ const items = [
         id: 1,
         title: '去云南旅行',
         price: 200,
-        data: '2010-01-21',
+        data: '2019-10-21',
         cid:1
 
     },
@@ -33,18 +33,26 @@ const items = [
         id: 2,
         title: '去云南旅行',
         price: 300,
-        data: '2010-01-21',
+        data: '2019-09-21',
         cid:2
     },
     {
         id: 1,
         title: '去云南旅行',
         price: 200,
-        data: '2010-01-21',
+        data: '2019-09-21',
         cid:1
 
     }
-]
+];
+//创建一条新数据---low版本，写死
+const newItem = {
+    id: 5,
+    title:'这是个新数据' + parseInt(Math.random() * 100),
+    price: Math.floor(Math.random() * 300),
+    cid : 1,
+    data: '2019-10-10'
+};
 class Home extends Component {
     constructor(props) {
         super(props)
@@ -54,12 +62,39 @@ class Home extends Component {
             tabView:CHART_VIEW
         }
     }
+    changeView = (view) => {
+        this.setState({tabView: view})
+    };
+    changeDate = (year,month) => {
+        let currentDate = {year,month}
+        this.setState({currentDate})
+    };
+    modifyItem = (editItem) => {
+        let list = this.state.items.map(item=> {
+            if(editItem === item) {
+                return {...item, title: '更新后的标题'}
+            } else {
+                return item
+            }
+        })
+        this.setState({items:list})
+    };
+    createItem = ()=> {
+        console.log(1)
+        this.setState({items:[newItem, ...items]})
+        console.log(this.state.items)
+    };
+    deleteItem = (deleteItem)=> {
+        // let items = this.state.items.splice(item , 1)
+        let items = this.state.items.filter(item=> item !== deleteItem)
+        this.setState({items})
+    };
     render() {
         let { items,currentDate, tabView } = this.state
         let itemsWidthCategory = items.map(item=> {
             item.category = category[item.cid]
             return item
-        });
+        }).filter(item=>item.data.includes(`${currentDate.year}-${n(currentDate.month)}`));
         let inCome = 0, outCome = 0;
         itemsWidthCategory.map(item=> {
             if (item.category.type === TYPE_OUTCOME) {
@@ -76,7 +111,7 @@ class Home extends Component {
                             <MonthPicker
                                 year={currentDate.year}
                                 month={currentDate.month}
-                                onChange={(year,month)=>console.log(year,month)}
+                                onChange={(year,month)=>this.changeDate(year, month)}
                             />
                         </div>
                         <div className="col">
@@ -90,14 +125,20 @@ class Home extends Component {
                 <div className="content-area py-3 px-3">
                     <ViewTabs
                         activeTab={tabView}
-                        onTabChange={view=>{console.log(view)}}
+                        onTabChange={view=>this.changeView(view)}
                     />
-                    <CreateBtn onClick={()=>{}}/>
-                    <PriceList
-                        items={itemsWidthCategory}
-                        onModifyItem={item=>{alert(item.id)}}
-                        onDeleteItem={item=>{alert('delete')}}
-                    />
+                    {
+                        tabView === LIST_VIEW
+                            ? <Fragment>
+                                <CreateBtn onClick={()=>this.createItem()}/>
+                                <PriceList
+                                    items={itemsWidthCategory}
+                                    onModifyItem={item=>this.modifyItem(item)}
+                                    onDeleteItem={item=>this.deleteItem(item)}
+                                />
+                            </Fragment>
+                            : <div>图表~~</div>
+                    }
                 </div>
             </Fragment>
         );

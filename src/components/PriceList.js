@@ -6,10 +6,10 @@ const PriceList = ({items,onModifyItem,onDeleteItem}) => {
     return (
         <ul className="list-group list-group-flush">
             {
-                items.map(item=> (
+                items.map((item,index)=> (
                     <li
                         className="list-group-item d-flex justify-content-between align-items-center"
-                        key={item.id}
+                        key={index}
                     >
                         <span className="col-1 badge badge-primary">
                             <Ionicon

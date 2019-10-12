@@ -15,4 +15,25 @@
 5. 添加点击年份和月份的交互
 
 >> 容器组件:
-- 关心数据的运作方式，提供数据以及操作数据的方法，回调函数，有状态的，作为数据源的存在
+- 关心数据的运作方式，提供数据以及操作数据的方法，回调函数，有状态的，作为数据源的存在.
+
+```javascript
+//修改数组中的某项属性的value，原理object.assign()
+   modifyItem = (editItem) => {
+        let list = this.state.items.map(item=> {
+            if(editItem === item) {
+                return {...item, title: '更新后的标题'}
+            } else {
+                return item
+            }
+        })
+        this.setState({items:list})
+    };
+//函数式调用
+let itemsWidthCategory = items.map(item=> {
+            item.category = category[item.cid]
+            return item
+        }).filter(item=>item.data.includes(`${currentDate.year}-${n(currentDate.month)}`));
+//过滤列表
+
+```
