@@ -1,5 +1,5 @@
 import React from 'react';
-import { LIST_VIEW, CHART_VIEW} from "./utility";
+import { LIST_VIEW, CHART_VIEW} from "../utility";
 import Ionicon from "react-ionicons";
 import propTypes from 'prop-types'
 

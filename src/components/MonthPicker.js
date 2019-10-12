@@ -1,32 +1,52 @@
 import React, {Component} from 'react';
 import propTypes from 'prop-types'
-import { n } from './utility'
+import { n, range } from '../utility'
 class MonthPicker extends Component {
     constructor(props) {
         super(props)
         this.state={
-            isOpen: false
+            isOpen: false,
+            selectYear: this.props.year
         }
     }
-    getFullYears=()=>{
-        let year = new Date().getFullYear();
-        let preYear = year - 5;
-        let nextYear = year + 5;
-        let arr = []
-        for(var i = preYear; i<= nextYear; i++) {
-            arr.push(i)
-        }
-        return arr
+    componentDidMount() {
+        document.addEventListener('click',this.handleClick, false)
+    }
+    componentWillUnmount() {
+        document.removeEventListener('click', this.handleClick, false)
+    }
+
+    // handleClick=(e)=> {
+    //     if (this.node.contains(e.target)) {
+    //         return;
+    //     }
+    //     this.setState({
+    //         isOpen: false,
+    //     })
+    // };
+    toggleDown(e) {
+        e.preventDefault();
+        this.setState({isOpen: !this.state.isOpen})
+    }
+    selectYearNum(e, item) {
+        e.preventDefault();
+        this.setState({selectYear:item})
+    }
+    selectMonthNum(e,item) {
+        this.setState({isOpen: false})
+        this.props.onChange(this.state.selectYear, item)
     }
     render() {
+        let months = range(12,1)
+        let years = range(9, -4).map(item=>item + this.props.year)
         const {year, month } = this.props
-        const { isOpen }  = this.state
+        const { isOpen, selectYear }  = this.state
         return (
             <div className="dropdown moth-picker-component">
                 <h4>选择月份</h4>
                 <button
                     className="btn btn-lg btn-secondary dropdown-toggle"
-                    onClick={()=>this.setState({isOpen: !this.state.isOpen})}
+                    onClick={(e)=>this.toggleDown(e)}
                 >
                     { `${year}年${n(month)}月 `}
                 </button>
@@ -34,8 +54,29 @@ class MonthPicker extends Component {
                     isOpen && <div className="dropdown-menu" style={{display: 'block'}}>
                         <div className="row">
                             <div className="col border-right">
+                                {
+                                    years.map((item,index)=>(
+
+                                        <li
+                                            className={item === selectYear ? 'dropdown-item active text-white' : 'dropdown-item'}
+                                            key={index}
+                                            onClick={e=>this.selectYearNum(e,item)}
+                                        >{item}</li>
+                                    ))
+                                }
                             </div>
-                            <div className="col">333</div>
+                            <div className="col">
+                                {
+                                    months.map((item,index) => (
+                                        <li
+                                            key={index}
+                                            onClick={e=>this.selectMonthNum(e,item)}
+                                            className={item === month ? 'dropdown-item active text-white' : 'dropdown-item'}
+                                        >{n(item)}</li>
+                                        )
+                                    )
+                                }
+                            </div>
                         </div>
                     </div>
                 }
