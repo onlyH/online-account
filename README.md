@@ -43,3 +43,7 @@ let itemsWidthCategory = items.map(item=> {
 >> react官方测试工具- reactTestUtils
 >> Airbnb基于官网的封装-Enzyme
 >> Enzyme优点：简单，易懂，类似于jquery链式写法
+ 
+##### 在React中，当涉及组件嵌套，在父组件中使用props.children把所有子组件显示出来
+##### 把父组件中的属性传给所有的子组件:React.Children.map(props.children,(child,index)=>{})
+##### 引入propTypes是做检测，isRequired类似于vue的required
